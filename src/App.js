@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
+
+
+
+const App = () => {
+
+    const reset = () =>{
+        const ele = document.getElementsByClassName("main-content");
+        ele[0].innerHTML="";
+    }
+    const startListening = () => SpeechRecognition.startListening({ continuous: true, language: 'en-IN' });
+    const { transcript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+
+    if (!browserSupportsSpeechRecognition) {
+        return null
+    }
+
+    return (
+        <>
+            <div className="container">
+                <h2>Convert</h2>
+                <div className="btn-style">
+                    <button onClick={startListening}>Start Listening</button>
+                    <button onClick={SpeechRecognition.stopListening}>Stop Listening</button>
+                    <button onClick={reset}>Reset</button>
+                </div>
+                <div className="main-content" >
+                    {transcript}
+                </div>
+            </div>
+
+        </>
+    );
+};
 
 export default App;
